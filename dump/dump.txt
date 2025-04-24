@@ -1,0 +1,136 @@
+-- Установка параметров
+SET TIME ZONE 'UTC';
+
+-- Создание таблицы cart
+CREATE TABLE cart (
+    id SERIAL PRIMARY KEY,
+    item_id INT NOT NULL,
+    order_id INT NOT NULL,
+    amount SMALLINT NOT NULL DEFAULT 1,
+    cost INT
+);
+
+-- Вставка данных в cart
+INSERT INTO cart (id, item_id, order_id, amount, cost) VALUES
+(35, 12, 12, 1, 85);
+
+-- Создание таблицы category
+CREATE TABLE category (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(350) NOT NULL
+);
+
+-- Вставка данных в category
+INSERT INTO category (id, title) VALUES
+(1, 'Альстромерия'),
+(2, 'Гербера'),
+(3, 'Роза'),
+(4, 'Ирис'),
+(5, 'Нарцисс'),
+(6, 'Тюльпан'),
+(7, 'Фрезия'),
+(8, 'Эустома');
+
+-- Создание таблицы item
+CREATE TABLE item (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(250) NOT NULL,
+    price INT NOT NULL,
+    description TEXT NOT NULL,
+    is_actual BOOLEAN NOT NULL DEFAULT TRUE,
+    category_id INT NOT NULL REFERENCES category(id),
+    image VARCHAR(64),
+    amount INT,
+    supplier_id INT
+);
+
+-- Вставка данных в item
+INSERT INTO item (id, title, price, description, is_actual, category_id, image, amount, supplier_id) VALUES
+(11, 'Альстромерия Yoliroses Purple дл.80 10шт', 95, 'Альстромерия Yoliroses Purple дл.80 10шт', TRUE, 1, 'ihlansy8o4z1yi0r19w7ohkngrg1f7ax.jpeg', NULL, NULL),
+(12, 'Альстромерия Sunline 10шт', 85, 'Альстромерия Sunline 10шт', TRUE, 1, 'uxa0os10b2eq3su7mebwe5jd9l2byom3.jpeg', NULL, NULL);
+
+-- Создание таблицы order
+CREATE TABLE orders (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    user_info_id INT,
+    status VARCHAR(20) DEFAULT 'Корзина',
+    dt_create DATE DEFAULT CURRENT_DATE,
+    dt_update DATE DEFAULT CURRENT_DATE,
+    cost INT,
+    comment TEXT,
+    pay_method VARCHAR(20) CHECK (pay_method IN ('Картой', 'Наличными'))
+);
+
+-- Вставка данных в orders
+INSERT INTO orders (id, user_id, user_info_id, status, dt_create, dt_update, cost, comment, pay_method) VALUES
+(12, 7, NULL, 'Корзина', '2025-04-03', '2025-04-03', 85, NULL, NULL);
+
+-- Создание таблицы rate
+CREATE TABLE rate (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    item_id INT NOT NULL,
+    estim INT CHECK (estim BETWEEN 1 AND 5),
+    txt TEXT
+);
+
+-- Создание таблицы site_info
+CREATE TABLE site_info (
+    id SERIAL PRIMARY KEY,
+    site_name VARCHAR(250),
+    slogan TEXT,
+    email VARCHAR(150),
+    phone1 VARCHAR(150),
+    phone2 VARCHAR(150),
+    vk VARCHAR(150),
+    tg VARCHAR(150),
+    user_id INT
+);
+
+-- Создание таблицы supplier
+CREATE TABLE supplier (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(250) NOT NULL,
+    address VARCHAR(250) NOT NULL,
+    phone VARCHAR(20) NOT NULL,
+    inn VARCHAR(20) NOT NULL
+);
+
+-- Создание таблицы user
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    login VARCHAR(250),
+    password_hash VARCHAR(250),
+    first_name VARCHAR(250),
+    last_name VARCHAR(250),
+    middle_name VARCHAR(250),
+    phone VARCHAR(250),
+    email VARCHAR(250),
+    role_id INT DEFAULT 0
+);
+
+-- Вставка данных в users
+INSERT INTO users (id, login, password_hash, first_name, last_name, middle_name, phone, email, role_id) VALUES
+(5, 'admin', '$2y$13$X3hc7pSBEReq6DuL3hs26.iXv236tZR6JOMqf0WhpVQ4TxKp7eh1W', NULL, NULL, NULL, NULL, 'admin@mail.ru', 1),
+(7, NULL, '$2y$13$XtfQIUjRpJs2LyNGOFVOCOi100Sg7485SMzz1gy5iZnmOCWiTL/SK', 'Евгений', NULL, NULL, NULL, 'user@mail.ru', 2);
+
+-- Создание таблицы user_info
+CREATE TABLE user_info (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL REFERENCES users(id),
+    address TEXT,
+    title TEXT,
+    inn TEXT
+);
+
+-- Вставка данных в user_info
+INSERT INTO user_info (id, user_id, address, title, inn) VALUES
+(2, 7, 'Адрес', NULL, NULL);
+
+-- Создание таблицы user_role
+CREATE TABLE user_role (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(250) NOT NULL,
+    description TEXT NOT NULL
+);
