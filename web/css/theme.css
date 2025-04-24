@@ -1,0 +1,157 @@
+/* Основные цвета */
+:root {
+    --primary-color: #007bff;
+    --secondary-color: #0067d4;
+    --light-color: #f8f9fa;
+    --dark-color: rgba(34,34,34);
+}
+
+.bg-theme{
+    background-color: var(--dark-color);
+}
+
+/* Фирменные стили */
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--light-color);
+    color: var(--dark-color);
+}
+
+/* Навигационное меню */
+.navbar {
+    padding: 1rem;
+}
+
+/* Слайдер */
+.carousel-item img {
+    height: 500px;
+    object-fit: cover;
+}
+
+/* Преимущества */
+.advantages {
+    color: white;
+}
+
+.advantage-card {
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    margin: 10px;
+    height: 250px;
+    transition: 0.3s;
+    border-color: white;
+    border: 1px solid;
+    box-shadow: 1px 1px 2px white;
+    cursor: pointer;
+}
+
+.advantage-card:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: scale(1.05);
+}
+
+.advantage-card i {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 10px;
+}
+
+/* Подвал */
+.footer {
+    background: var(--dark-color);
+}
+
+.hero{
+    background-image: url('/img/hero.jpg');
+    background-position: center;
+    background-size: cover;
+    height: 300px;
+}
+
+/* Наши проекты */
+.project-card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    transition: transform 0.3s ease-in-out;
+    text-align: center;
+    height: 350px;
+}
+.project-card:hover {
+    transform: scale(1.05);
+}
+.project-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+/* Отзывы клиентов */
+.testimonial-card {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+}
+.testimonial-card:hover {
+    transform: scale(1.05);
+}
+.testimonial-card img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+/* Сайдбар */
+.list-group-item {
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+.list-group-item:hover {
+    background: #FFB300;
+    color: white;
+}
+.list-group-item.active {
+    background: #5D4037;
+    color: white;
+}
+
+/* Карточки */
+.card {
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out;
+}
+.card:hover {
+    transform: scale(1.05);
+}
+.card img {
+    height: 180px;
+    object-fit: cover;
+}
+
+.h-100{
+    height: 100px;
+}
+
+.cert-img {
+    height: 200px;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+/* Карта */
+#map {
+    width: 100%;
+    height: 400px;
+    border-radius: 8px;
+}
+

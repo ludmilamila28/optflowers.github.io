@@ -1,0 +1,639 @@
+<?php
+
+namespace app\controllers;
+
+use app\models\Category;
+use Yii;
+use yii\filters\AccessControl;
+use yii\web\Controller;
+use PhpOffice\PhpWord\PhpWord;
+use PhpOffice\PhpWord\IOFactory;
+use PhpOffice\Math\Element;
+use PhpOffice\Math\Math;
+use PhpOffice\Math\Reader\MathML;
+use app\models\DatabaseSchema;
+use SVG\SVG;
+use SVG\Nodes\Shapes\SVGRect;
+use SVG\Nodes\Texts\SVGText;
+use SVG\Nodes\Shapes\SVGCircle;
+use SVG\Nodes\Shapes\SVGLine;
+
+class SiteController extends Controller
+{
+
+    public function actions()
+    {
+        return [
+            'error' => [
+                'class' => 'yii\web\ErrorAction',
+            ],
+            'captcha' => [
+                'class' => 'yii\captcha\CaptchaAction',
+                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
+            ],
+        ];
+    }
+
+    public function actionIndex()
+    {
+
+
+        $str = "
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Хост: MySQL-8.0
+-- Время создания: Авг 02 2024 г., 20:30
+-- Версия сервера: 8.0.35
+-- Версия PHP: 8.2.18
+
+SET SQL_MODE = \"NO_AUTO_VALUE_ON_ZERO\";
+START TRANSACTION;
+SET time_zone = \"+00:00\";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- База данных: `NewsSite`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `Admin`
+--
+
+CREATE TABLE `Admin` (
+  `id` int UNSIGNED NOT NULL,
+  `login` varchar(155) NOT NULL,
+  `password_hash` varchar(155) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Дамп данных таблицы `Admin`
+--
+
+
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `Categories`
+--
+
+CREATE TABLE `Categories` (
+  `id` int NOT NULL,
+  `name` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Дамп данных таблицы `Categories`
+--
+
+INSERT INTO `Categories` (`id`, `name`) VALUES
+(1, 'Спорт'),
+(2, 'Музыка'),
+(3, 'Экономика'),
+(4, 'Культура');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `News`
+--
+
+CREATE TABLE `News` (
+  `id` int NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `content` text NOT NULL,
+  `category_id` int DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `publish_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Дамп данных таблицы `News`
+--
+
+INSERT INTO `News` (`id`, `title`, `content`, `category_id`, `image`, `publish_date`) VALUES
+(1, 'Ламин Ямаль - лучший игрок недели', '<p><strong>Как важно не засыпать молодого футболиста комплиментами на старте карьеры. Как важно терпеливо дождаться от него действительно достойной игры, чтобы потом и восхищаться, и ставить другим в пример. Сколько загубленных талантов было из-за слишком сладких слов.</strong></p>\r\n\r\n<p><strong>В той же&nbsp;<a href=\"https://football.kulichki.net/spain/2025/teams/barcelona.htm\" style=\"color: rgb(37, 75, 37); text-decoration-line: none;\">&quot;Барселоне&quot;</a>&nbsp;как много говорили о потенциале&nbsp;<a href=\"https://football.kulichki.net/players/21774.htm\" style=\"color: rgb(37, 75, 37); text-decoration-line: none;\">Ансу Фати</a>, называли его наследником Лионеля Месси. И молодой человек действительно не выдержал повышенного внимания. Да и других талантливых выпускников академии хватало.</strong></p>\r\n\r\n<p><strong>&nbsp;<a href=\"https://football.kulichki.net/players/5920.htm\" style=\"color: rgb(37, 75, 37); text-decoration-line: none;\">Марк Бартра</a>&nbsp;считался сменщиком Жерара Пике, но надолго в &quot;Барселоне&quot; не задержался. Были и другие испанцы, от которых ждали гораздо большего.&nbsp;<a href=\"https://football.kulichki.net/players/14263.htm\" style=\"color: rgb(37, 75, 37); text-decoration-line: none;\">Марко Асенсио</a>&nbsp;&ndash; в определенный период он вроде бы выцарапал себе место в основе &quot;Реала&quot;, становясь таким же и в сборной. Но сам футболист такой уровень не потянул. И сейчас не всегда проходит в стартовый состав ПСЖ, а в сборную и вовсе не попал.&nbsp;</strong></p>\r\n\r\n<p><strong>Поэтому, когда на старте сезона говорили о Ламине Ямале, не хотелось торопить события. Требовалось подождать, что будет дальше. И&nbsp;<a href=\"https://football.kulichki.net/players/28889.htm\" style=\"color: rgb(37, 75, 37); text-decoration-line: none;\">Ламин Ямаль</a>&nbsp;своей игрой на Евро доказал &ndash; все эпитеты были заслуженными.</strong></p>\r\n', 1, '/img/31281.jpg', '2024-07-18 01:21:34'),
+(2, 'Баскетбольный турнир', 'Описание баскетбольного турнира', 1, 'https://via.placeholder.com/750x450/4BB92F/FFFFFF?text=Basketball+Tournament', '2024-07-18 01:21:34'),
+(3, 'Теннисный чемпионат', 'Описание теннисного чемпионата', 1, 'https://via.placeholder.com/750x450/4BB92F/FFFFFF?text=Tennis+Championship', '2024-07-18 01:21:34'),
+(4, 'Хоккейная лига', 'Описание хоккейной лиги', 1, 'https://via.placeholder.com/750x450/4BB92F/FFFFFF?text=Hockey+League', '2024-07-18 01:21:34'),
+(5, 'Легкая атлетика', 'Описание соревнований по легкой атлетике', 1, 'https://via.placeholder.com/750x450/4BB92F/FFFFFF?text=Athletics', '2024-07-18 01:21:34'),
+(6, 'Формула 1', 'Описание гонок Формулы 1', 1, 'https://via.placeholder.com/750x450/4BB92F/FFFFFF?text=Formula+1', '2024-07-18 01:21:34'),
+(7, 'Новый альбом', 'Описание нового музыкального альбома', 2, 'https://via.placeholder.com/750x450/ff8700/FFFFFF?text=New+Album', '2024-07-18 01:21:34'),
+(8, 'Музыкальный фестиваль', 'Описание музыкального фестиваля', 2, 'https://via.placeholder.com/750x450/ff8700/FFFFFF?text=Music+Festival', '2024-07-18 01:21:34'),
+(9, 'Концерт группы', 'Описание концерта группы', 2, 'https://via.placeholder.com/750x450/ff8700/FFFFFF?text=Band+Concert', '2024-07-18 01:21:34'),
+(10, 'Премия Грэмми', 'Описание церемонии вручения премии Грэмми', 2, 'https://via.placeholder.com/750x450/ff8700/FFFFFF?text=Grammy+Awards', '2024-07-18 01:21:34'),
+(11, 'Классическая музыка', 'Описание концерта классической музыки', 2, 'https://via.placeholder.com/750x450/ff8700/FFFFFF?text=Classical+Music', '2024-07-18 01:21:34'),
+(12, 'Рок-концерт', 'Описание рок-концерта', 2, 'https://via.placeholder.com/750x450/ff8700/FFFFFF?text=Rock+Concert', '2024-07-18 01:21:34'),
+(13, 'Фондовый рынок', 'Описание ситуации на фондовом рынке', 3, 'https://via.placeholder.com/750x450/0078ff/FFFFFF?text=Stock+Market', '2024-07-18 01:21:34'),
+(14, 'Нефтяные цены', 'Описание изменений цен на нефть', 3, 'https://via.placeholder.com/750x450/0078ff/FFFFFF?text=Oil+Prices', '2024-07-18 01:21:34'),
+(15, 'Экономический рост', 'Описание экономического роста', 3, 'https://via.placeholder.com/750x450/0078ff/FFFFFF?text=Economic+Growth', '2024-07-18 01:21:34'),
+(16, 'Банковский кризис', 'Описание банковского кризиса', 3, 'https://via.placeholder.com/750x450/0078ff/FFFFFF?text=Banking+Crisis', '2024-07-18 01:21:34'),
+(17, 'Инфляция', 'Описание уровня инфляции', 3, 'https://via.placeholder.com/750x450/0078ff/FFFFFF?text=Inflation', '2024-07-18 01:21:34'),
+(18, 'Рынок недвижимости', 'Описание ситуации на рынке недвижимости', 3, 'https://via.placeholder.com/750x450/0078ff/FFFFFF?text=Real+Estate+Market', '2024-07-18 01:21:34'),
+(19, 'Выставка современного искусства', 'Описание выставки современного искусства', 4, 'https://via.placeholder.com/750x450/8d00ff/FFFFFF?text=Art+Exhibition', '2024-07-18 01:21:34'),
+(20, 'Театральная премьера', 'Описание театральной премьеры', 4, 'https://via.placeholder.com/750x450/8d00ff/FFFFFF?text=Theater+Premiere', '2024-07-18 01:21:34'),
+(22, 'Литературная премия', 'Описание литературной премии', 4, 'https://via.placeholder.com/750x450/8d00ff/FFFFFF?text=Literary+Award', '2024-07-18 01:21:34'),
+(23, 'Фестиваль танца', 'Описание фестиваля танца', 4, 'https://via.placeholder.com/750x450/8d00ff/FFFFFF?text=Dance+Festival', '2024-07-18 01:21:34'),
+(24, 'Исторический музей', 'Описание новой экспозиции в историческом музее', 4, 'https://via.placeholder.com/750x450/8d00ff/FFFFFF?text=History+Museum', '2024-07-18 01:21:34'),
+(32, 'Фиаско «Сочи» и удачный выезд «Ротора»', '<p>Вот у кого старт получился неудачным, так это у &laquo;Сочи&raquo;. Южане под руководством Роберта Морено отправились в Екатеринбург в гости к &laquo;Уралу&raquo;. Обе команды в прошлом сезоне вылетели из РПЛ, так что матч обещал быть очень интересным.</p>\r\n\r\n<p>Первый момент создали как раз &laquo;барсы&raquo;. После прострела Крамарича пробил Гуарирапа, но уральцев выручил голкипер Мамин. Перед перерывом шанс был и у хозяев, но Алексей Каштанов пробил мимо створа. В самом начале второй половины &laquo;шмели&raquo; вышли вперед. После заброса Егорычева на рандеву с голкипером вышел Каштанов, который на этот раз послал мяч в сетку. Через десять минут после этого &laquo;Урал&raquo; удвоил свое преимущество усилиями полузащитника Тимура Аюпова. Команда из Сочи в итоге даже на один гол не смогла наиграть, так что футболисты &laquo;Урала&raquo; отпраздновали домашнюю победу со счетом 2:0.</p>\r\n\r\n<p>Хорошо стартовал вернувшийся в Первую лигу &laquo;Ротор&raquo;. Волгоградский коллектив под руководством Дениса Бояринцева удачно съездил в гости к &laquo;Шиннику&raquo;. Уже на 14-й минуте &laquo;Ротор&raquo; сумел открыть счет. Эффектный гол получился у Дмитрия Прищепы. В середине первого тайма защитник гостей замахивался на дубль.</p>\r\n\r\n<p>Прищепа мощно пробил со стандарта, но голкипер &laquo;Шинника&raquo; Митров выручил свою команду. В начале второго тайма ярославский клуб заставил поработать вратаря &laquo;Ротора&raquo; Никиту Чагрова, который справился со всеми ударами по своим владениям. В итоге дружина Бояринцева сохранила свое минимальное преимущество вплоть до финального свистка Инала Танашева, который зафиксировал минимальную викторию &laquo;Ротора&raquo; со счетом 1:0.</p>\r\n', 1, '/img/31290.jpg', '2024-07-19 01:24:46'),
+(33, 'Витя АК-47 захотел записать хит с Канье Уэстом', '<p><span style=\"color:rgb(153, 153, 153); font-family:lato lenta,helvetica neue,helvetica,arial,sans-serif; font-size:18px\">Рэпер Витя АК-47 признался, что мечтает о коллаборации с Канье Уэстом</span></p>\r\n\r\n<p>&nbsp;</p>\r\n', 2, '/img/owl_detail_620_61fb4227dd009f2b523cc37ce82555ba.jpg', '2024-07-19 03:36:06'),
+(34, 'Центробанк сообщил об ускорении инфляции за счет фруктов и овощей', '<p class=\"title\"><span style=\"background-color:rgb(255, 255, 255); color:rgb(41, 41, 41); font-family:source serif pro lenta,serif; font-size:17px\">Существенный вклад в динамику внесло продовольствие, в первую очередь &mdash; фрукты и овощи. Также ускорился годовой рост цен на большинство услуг, а непродовольственные товары, напротив, стали дорожать медленнее.</span></p>\r\n\r\n<p class=\"title\"><span style=\"color:rgb(41, 41, 41); font-family:source serif pro lenta,serif; font-size:17px\">Самая высокая инфляция зафиксирована в Дальневосточном федеральном округе &mdash; 9,3 процента после 9,15 процента в мае, а самая низкая &mdash; в Уральском федеральном округе &mdash; 7,61 процента против 7,39 процента.</span></p>\r\n', 3, '/img/owl_detail_620_fb4004acda53a376fb44626fe6e81369.jpg', '2024-07-19 03:42:19'),
+(35, 'У Александринского театра сменился худрук', '<p>Художественным руководителем Александринского театра в Санкт-Петербурге станет режиссер Никита Кобелев. Об этом в театральной пресс-службе в пятницу, 12 июля, рассказали РИА Новости.</p>\r\n\r\n<p>В пресс-службе отметили, что народный артист России&nbsp;Валерий Фокин, занимавший пост худрука более 20 лет, станет президентом Александринского театра.</p>\r\n\r\n<p>Новый художественный руководитель объяснил&nbsp;&laquo;Интерфаксу&raquo;&nbsp;кадровую перестановку тем, что в театре &laquo;немного изменилась конфигурация&raquo;. Он отметил, что Фокин остается в Александринке.</p>\r\n', 4, '/img/owl_detail_620_d838574a02ce0686c0556ba065321058.jpg', '2024-07-19 03:48:16');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `NewsTags`
+--
+
+CREATE TABLE `NewsTags` (
+  `news_id` int NOT NULL,
+  `tag_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Дамп данных таблицы `NewsTags`
+--
+
+INSERT INTO `NewsTags` (`news_id`, `tag_id`) VALUES
+(1, 1),
+(2, 2),
+(3, 3),
+(4, 4),
+(5, 5),
+(6, 6),
+(7, 7),
+(8, 8),
+(9, 9),
+(10, 10),
+(11, 11),
+(12, 12),
+(13, 13),
+(14, 14),
+(15, 15),
+(16, 16),
+(17, 17),
+(18, 18),
+(19, 19),
+(20, 20),
+(22, 22),
+(23, 23),
+(24, 24);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `Tags`
+--
+
+CREATE TABLE `Tags` (
+  `id` int NOT NULL,
+  `name` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Дамп данных таблицы `Tags`
+--
+
+INSERT INTO `Tags` (`id`, `name`) VALUES
+(1, 'Футбол'),
+(2, 'Баскетбол'),
+(3, 'Теннис'),
+(4, 'Хоккей'),
+(5, 'Легкая атлетика'),
+(6, 'Формула 1'),
+(7, 'Альбом'),
+(8, 'Фестиваль'),
+(9, 'Концерт'),
+(10, 'Грэмми'),
+(11, 'Классическая музыка'),
+(12, 'Рок'),
+(13, 'Фондовый рынок'),
+(14, 'Нефть'),
+(15, 'Экономика'),
+(16, 'Банки'),
+(17, 'Инфляция'),
+(18, 'Недвижимость'),
+(19, 'Искусство'),
+(20, 'Театр'),
+(21, 'Кино'),
+(22, 'Литература'),
+(23, 'Танцы'),
+(24, 'История');
+
+--
+-- Индексы сохранённых таблиц
+--
+
+--
+-- Индексы таблицы `Admin`
+--
+ALTER TABLE `Admin`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `Categories`
+--
+ALTER TABLE `Categories`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `News`
+--
+ALTER TABLE `News`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `category_id` (`category_id`);
+ALTER TABLE `News` ADD FULLTEXT KEY `title` (`title`);
+
+--
+-- Индексы таблицы `NewsTags`
+--
+ALTER TABLE `NewsTags`
+  ADD PRIMARY KEY (`news_id`,`tag_id`),
+  ADD KEY `tag_id` (`tag_id`);
+
+--
+-- Индексы таблицы `Tags`
+--
+ALTER TABLE `Tags`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT для сохранённых таблиц
+--
+
+--
+-- AUTO_INCREMENT для таблицы `Admin`
+--
+ALTER TABLE `Admin`
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT для таблицы `Categories`
+--
+ALTER TABLE `Categories`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT для таблицы `News`
+--
+ALTER TABLE `News`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+
+--
+-- AUTO_INCREMENT для таблицы `Tags`
+--
+ALTER TABLE `Tags`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+
+--
+-- Ограничения внешнего ключа сохраненных таблиц
+--
+
+--
+-- Ограничения внешнего ключа таблицы `News`
+--
+ALTER TABLE `News`
+  ADD CONSTRAINT `news_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `Categories` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `NewsTags`
+--
+ALTER TABLE `NewsTags`
+  ADD CONSTRAINT `newstags_ibfk_1` FOREIGN KEY (`news_id`) REFERENCES `News` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `newstags_ibfk_2` FOREIGN KEY (`tag_id`) REFERENCES `Tags` (`id`) ON DELETE CASCADE;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+        ";
+
+
+
+        //$str = str_replace([','], ' ', $str);
+        //$str = str_replace(['`',], '', $str);
+
+        $str_arr = explode(';', $str);
+
+        $keys = [];
+
+        $exclude = [
+            '',
+        ];
+
+        function fltr($arr, $exclude): array
+        {
+            $filtered = array_filter($arr, function ($i) use ($exclude) {
+                return !in_array(trim($i), $exclude);
+            });
+            return array_values($filtered);
+        }
+
+        // Регулярное выражение для поиска строки
+        $pattern = '/FOREIGN KEY\s+[^\s]+\s+REFERENCES\s+[^\s]+\([^\)]+\)/i';
+        $pattern = '/FOREIGN KEY\s*\([^)]+\)\s*REFERENCES\s+[^\(]+\([^\)]+\)/i';
+
+        //du($str);
+
+        // Поиск строки в тексте
+        if (preg_match_all($pattern, $str, $matches)) {
+            foreach($matches[0] as &$mt){
+                $mt = str_ireplace(['FOREIGN KEY', 'REFERENCES', '`', '(', ')'], ' ', $mt);
+                $mt_arr = fltr(explode(' ', $mt), $exclude);
+                $keys[] = [
+                    'fk' => $mt_arr[0],
+                    'ref' => $mt_arr[1],
+                    'pk' => $mt_arr[2]
+                ];
+            }
+        } else {
+            echo "Строки не найдены.";
+        }
+
+        $db = [];
+
+
+
+        $exclude2 = [
+            '',
+            'PRIMARY',
+            'FOREIGN',
+            'KEY',
+            'REFERENCES',
+            'ON',
+            'CONSTRAINT'
+        ];
+
+        $exclude3 = [
+            '',
+            'FOREIGN',
+            'KEY',
+            'REFERENCES',
+            'ON',
+            'CONSTRAINT'
+        ];
+
+
+
+
+        function is_type($elem): bool
+        {
+            $types = [
+                'int',
+                'varchar',
+                'enum',
+                'timestamp'
+            ];
+
+            foreach ($types as $type) {
+                if (str_contains(strtolower($elem), $type)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function is_enum($elem): bool
+        {
+            $types = [
+
+                'enum'
+            ];
+
+            foreach ($types as $type) {
+                if (str_contains(strtolower($elem), $type)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        foreach ($str_arr as $k => $row) {
+
+
+        }
+
+        foreach ($str_arr as $k => &$row) {
+
+            if (!str_contains($row, 'create') && !str_contains($row, 'CREATE')) {
+                unset($str_arr[$k]);
+            } else {
+                $row = substr($row, stripos($row, 'create'));
+            }
+        }
+
+
+
+        foreach ($str_arr as $sql) {
+            if (str_contains($sql, 'DATABASE') || str_contains($sql, 'database')) {
+                $db_name = trim(end(explode(' ', $sql)), '`');
+                $db['dbname'] = $db_name;
+            }
+            if (str_contains($sql, 'TABLE') || str_contains($sql, 'table')) {
+                $sql_attr = stristr($sql, '(');
+
+                $sql_attr = substr($sql_attr, stripos($sql_attr, '(') + 1, strripos($sql_attr, ')'));
+
+                $attrs = [];
+
+                $sql_attr_arr = explode(',', $sql_attr);
+
+                //   du($sql_attr_arr);
+
+                foreach ($sql_attr_arr as $attr) {
+
+                    $attr_arr = explode(' ', $attr);
+                    $attr_arr = fltr($attr_arr, $exclude);
+
+                    if (count($attr_arr) < 2) {
+
+                        continue;
+                    }
+
+                    if (is_type($attr_arr[1])) {
+                        if (is_enum($attr_arr[1])) {
+                            $attr_arr[1] = 'enum';
+                        }
+                        $attrs[] = [trim($attr_arr[0], '`'), $attr_arr[1]];
+                    }
+                }
+
+                $sql_table = stristr($sql, '(', true);
+
+                $table_name_arr = fltr(explode(' ', $sql_table), $exclude);
+                $table_name = trim(end($table_name_arr), '`');
+
+                $db['tables'][] = ['table_name' => $table_name, 'attributes' => $attrs];
+            }
+        }
+
+
+        //  du($str_arr);
+
+
+        //   du($db);
+
+        // du($attrs);
+
+
+        $db['keys'] = $keys;
+
+        $image = new SVG(1000, 900);
+        $doc = $image->getDocument();
+
+
+
+        $rect1 = new SVGRect(80,10,90,110);
+        $rect1->setStyle('stroke', 'purple');
+        $rect1->setStyle('stroke-width', '2');
+        $rect1->setStyle('fill', 'none');
+        $doc->addChild($rect1);
+
+        $line1 = new SVGLine(80,30,170,30);
+        $line1 ->setStyle('stroke', 'purple');
+        $line1 ->setStyle('stroke-width', '2');
+        $line1 ->setStyle('fill', 'none');
+
+        $line2 = new SVGLine(80,50,170,50);
+        $line2 ->setStyle('stroke', 'purple');
+        $line2 ->setStyle('stroke-width', '2');
+        $line2 ->setStyle('fill', 'none');
+
+
+        $doc->addChild($line1);
+        $doc->addChild($line2);
+
+
+        $styledText = new SVGText('Styled Text', 500, 100);
+        $styledText->setStyle('fill', 'purple');
+        $styledText->setStyle('font-size', '24px');
+        $styledText->setStyle('font-weight', 'bold');
+        $styledText->setStyle('text-decoration', 'underline');
+        $doc->addChild($styledText);
+
+        // Устанавливаем заголовок для отображения SVG в браузере
+        header('Content-Type: image/svg+xml');
+        echo $image->toXMLString();
+
+        $phpWord = new PhpWord();
+
+        // Добавляем раздел
+
+        $phpWord->setDefaultFontName('Times New Roman');
+        $phpWord->setDefaultFontSize(14);
+        $fontStyle12 = ['spaceAfter' => 60, 'size' => 14];
+        $fontStyle10 = ['size' => 10];
+        $phpWord->addTitleStyle(null, ['size' => 22, 'bold' => true]);
+        $phpWord->addTitleStyle(1, ['size' => 20, 'color' => '333333', 'bold' => true]);
+        $phpWord->addTitleStyle(2, ['size' => 16, 'color' => '666666']);
+        $phpWord->addTitleStyle(3, ['size' => 14, 'italic' => true]);
+        $phpWord->addTitleStyle(4, ['size' => 12]);
+
+
+
+        $sectionStyle = array(
+            'marginLeft' => 30 * 56.7,   // 30 мм
+            'marginRight' => 15 * 56.7,  // 15 мм
+            'marginTop' => 20 * 56.7,    // 20 мм
+            //  'marginBottom' => 20 * 56.7, // 20 мм
+            'headerHeight' => 20 * 56.7, // 20 мм для верхнего колонтитула
+            'footerHeight' => 20 * 56.7  // 20 мм для нижнего колонтитула
+        );
+
+
+        // Добавляем раздел с заданными колонтитулами и разными первыми страницами
+        $section = $phpWord->addSection(array_merge($sectionStyle, ['titlePg' => true]));
+
+                // Add text elements
+        $section->addTitle('Table of contents 1', 0);
+        $section->addTextBreak(2);
+
+        // Add TOC #1
+        $toc = $section->addTOC($fontStyle12);
+        $section->addTextBreak(2);
+
+        // Filler
+        $section->addText('Text between TOC');
+        $section->addTextBreak(2);
+
+        // Add TOC #1
+        $section->addText('Table of contents 2');
+        $section->addTextBreak(2);
+        $toc2 = $section->addTOC($fontStyle10);
+        $toc2->setMinDepth(2);
+        $toc2->setMaxDepth(3);
+
+        // Add Titles
+        $section->addPageBreak();
+        $section->addTitle('Foo n Bar', 1);
+        $section->addText('Some text...');
+        $section->addTextBreak(2);
+
+        $section->addTitle('I am a Subtitle of Title 1', 2);
+        $section->addTextBreak(2);
+        $section->addText('Some more text...');
+        $section->addTextBreak(2);
+
+        $section->addTitle('Another Title (Title 2)', 1);
+        $section->addText('Some text...');
+        $section->addPageBreak();
+        $section->addTitle('I am Title 3', 1);
+        $section->addText('And more text...');
+        $section->addTextBreak(2);
+        $section->addTitle('I am a Subtitle of Title 3', 2);
+        $section->addText('Again and again, more text...');
+        $section->addTitle('Subtitle 3.1.1', 3);
+        $section->addText('Text');
+        $section->addTitle('Subtitle 3.1.1.1', 4);
+        $section->addText('Text');
+        $section->addTitle('Subtitle 3.1.1.2', 4);
+        $section->addText('Text');
+        $section->addTitle('Subtitle 3.1.2', 3);
+        $section->addText('Text');
+
+
+        $section->addText('I am styled by a font style definition.');
+
+
+        foreach ($db['tables'] as $tb) {
+            $table = $section->addTable(array('borderSize' => 1, 'borderColor' => '000000'));
+            $table->addRow();
+            $table->addCell(4000, array('gridSpan' => 2))->addText($tb['table_name']);
+            foreach ($tb['attributes'] as $attr) {
+                $table->addRow();
+                $table->addCell(2000)->addText($attr[0]);
+                $table->addCell(2000)->addText($attr[1]);
+            }
+            $section->addTextBreak(1);
+        }
+
+        $footer = $section->addFooter();
+        $footer->addPreserveText('{PAGE}', array('align' => 'center'));
+
+
+
+
+        $fileName = 'example.docx';
+        $filePath = Yii::getAlias('@webroot') . '/' . $fileName;
+
+        // Сохраняем файл
+        $objWriter = IOFactory::createWriter($phpWord, 'Word2007');
+        $objWriter->save($filePath);
+
+        // Возвращаем файл пользователю
+        return Yii::$app->response->sendFile($filePath);
+        
+        return ;
+    }
+}
